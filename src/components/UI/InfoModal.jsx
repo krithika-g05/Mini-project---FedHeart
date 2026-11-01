@@ -1,58 +1,75 @@
 import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, ExternalLink } from 'lucide-react';
+import { MODAL_CONTENT } from '../../constants/modalContent';
 
-export const InfoModal = ({ isOpen, onClose, title, content, link }) => {
+export function InfoModal({ modalKey, onClose }) {
+  if (!modalKey) return null;
+  const data = MODAL_CONTENT[modalKey];
+  if (!data) return null;
+  const Icon = data.icon;
+
   return (
     <AnimatePresence>
-      {isOpen && (
-        <>
-          <motion.div 
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
+      <motion.div
+        key="backdrop"
+        className="modal-backdrop"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        onClick={onClose}
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="modal-title"
+      >
+        <motion.div
+          className="modal-box"
+          initial={{ opacity: 0, y: 24, scale: 0.97 }}
+          animate={{ opacity: 1, y: 0, scale: 1 }}
+          exit={{ opacity: 0, y: 24, scale: 0.97 }}
+          transition={{ type: 'spring', stiffness: 400, damping: 32 }}
+          onClick={e => e.stopPropagation()}
+        >
+          <button 
+            className="modal-close" 
             onClick={onClose}
-            className="fixed inset-0 bg-black/80 backdrop-blur-md z-[9999] flex items-center justify-center p-6"
+            aria-label="Close modal"
           >
-            <motion.div 
-              initial={{ scale: 0.9, opacity: 0, y: 20 }}
-              animate={{ scale: 1, opacity: 1, y: 0 }}
-              exit={{ scale: 0.9, opacity: 0, y: 20 }}
-              onClick={(e) => e.stopPropagation()}
-              className="glass-card max-w-2xl w-full p-10 relative overflow-hidden"
-            >
-              <div className="absolute top-0 left-0 w-full h-1 bg-red-500" />
-              
-              <button 
-                onClick={onClose}
-                className="absolute top-4 right-4 p-2 text-zinc-500 hover:text-white hover:bg-zinc-800 rounded-lg transition-colors"
-              >
-                <X size={20} />
-              </button>
+            <X size={16} />
+          </button>
 
-              <h2 className="text-3xl font-bold mb-6 text-gradient">{title}</h2>
-              <div className="space-y-4 text-zinc-300 leading-relaxed text-sm lg:text-base">
-                {content.map((p, i) => (
-                  <p key={i}>{p}</p>
-                ))}
+          <div style={{ display: 'flex', alignItems: 'center', gap: 14, marginBottom: 28 }}>
+            <div style={{ padding: 10, borderRadius: 12, background: `${data.color}18`, border: `1px solid ${data.color}30` }}>
+              <Icon size={22} style={{ color: data.color }} />
+            </div>
+            <h2 id="modal-title" style={{ fontSize: 22, fontWeight: 800, letterSpacing: '-0.02em' }}>{data.title}</h2>
+          </div>
+
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
+            {data.sections.map((s, i) => (
+              <div key={i}>
+                <h3 style={{ fontSize: 13, fontWeight: 700, color: data.color, marginBottom: 8, textTransform: 'uppercase', letterSpacing: '0.06em' }}>{s.heading}</h3>
+                <p style={{ fontSize: 14, color: '#a1a1aa', lineHeight: 1.75 }}>{s.body}</p>
               </div>
+            ))}
+          </div>
 
-              {link && (
-                <div className="mt-10 pt-6 border-t border-zinc-800">
-                  <a 
-                    href={link} 
-                    target="_blank" 
-                    rel="noopener noreferrer"
-                    className="flex items-center gap-2 text-red-500 font-bold hover:text-red-400 transition-colors"
-                  >
-                    Explore Research Paper <ExternalLink size={16} />
-                  </a>
-                </div>
-              )}
-            </motion.div>
-          </motion.div>
-        </>
-      )}
+          {data.link && (
+            <a
+              href={data.link.href}
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{
+                display: 'inline-flex', alignItems: 'center', gap: 8, marginTop: 32,
+                paddingTop: 24, borderTop: '1px solid #27272a', color: data.color,
+                fontSize: 14, fontWeight: 600, textDecoration: 'none'
+              }}
+            >
+              {data.link.label} <ExternalLink size={14} />
+            </a>
+          )}
+        </motion.div>
+      </motion.div>
     </AnimatePresence>
   );
-};
+}
