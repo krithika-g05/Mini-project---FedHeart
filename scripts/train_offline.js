@@ -87,7 +87,7 @@ function logisticTrain(X, y, lr = 0.1, epochs = 200, l2 = 0.001) {
 
 function run() {
   console.log('Loading dataset...');
-  const csvContent = fs.readFileSync('./public/data set/heart_disease.csv', 'utf8');
+  const csvContent = fs.readFileSync('./public/dataset/heart_disease.csv', 'utf8');
   const results = Papa.parse(csvContent, { header: true, dynamicTyping: false, skipEmptyLines: true });
   const rows = results.data.filter(r => r['Heart Disease Status'] === 'Yes' || r['Heart Disease Status'] === 'No');
   console.log(`Valid rows: ${rows.length}`);

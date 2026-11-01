@@ -1,5 +1,5 @@
 import fs from 'fs';
-const content = fs.readFileSync('./public/data set/heart_disease.csv', 'utf8');
+const content = fs.readFileSync('./public/dataset/heart_disease.csv', 'utf8');
 const rows = content.split(/\r?\n/);
 
 const header = rows[0].split(',');
