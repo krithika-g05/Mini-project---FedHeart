@@ -2,11 +2,14 @@
   "name": "fedheart",
   "private": true,
   "version": "1.0.0",
+  "author": "Krithika G",
   "type": "module",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
     "lint": "eslint .",
+    "test": "vitest run",
+    "test:watch": "vitest",
     "preview": "npm run build && wrangler dev",
     "deploy": "npm run build && wrangler deploy"
   },
@@ -37,6 +40,7 @@
     "postcss": "^8.4.47",
     "tailwindcss": "^3.4.14",
     "vite": "^6.0.0",
+    "vitest": "^2.1.4",
     "wrangler": "^4.79.0"
   }
 }
